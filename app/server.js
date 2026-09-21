@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const VERSION = "4.2.0";
+const VERSION = "4.2.1";
 
 app.get("/", (req, res) => {
     res.json({
@@ -52,12 +52,20 @@ app.get("/cart", (req, res) => {
 });
 
 // Payment endpoint - version 4.2.0 contains the payment defect
+// Payment endpoint - payment defect fixed in version 4.2.1
 app.post("/payment", (req, res) => {
     const { amount } = req.body;
 
+    if (!amount || amount <= 0) {
+        return res.status(400).json({
+            status: "FAILED",
+            message: "Invalid payment amount"
+        });
+    }
+
     res.json({
         status: "SUCCESS",
-        message: "Payment processed",
+        message: "Payment processed successfully - Payment defect fixed",
         amount: amount
     });
 });
